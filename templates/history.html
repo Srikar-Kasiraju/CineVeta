@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}History | CineVeta{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">📜 Mood & Recommendation History</h2>
+
+    {% if history_data %}
+        <div class="accordion" id="historyAccordion">
+            {% for item in history_data %}
+                <div class="accordion-item bg-dark text-light mb-3 border-0">
+                    <h2 class="accordion-header">
+                        <button
+                            class="accordion-button collapsed bg-dark text-light"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#entry{{ loop.index }}"
+                        >
+                            <strong>{{ item.created_at }}</strong>
+                            &nbsp;— Emotion:
+                            <span class="ms-2">
+                                {{ item.emotion | capitalize }}
+                            </span>
+                        </button>
+                    </h2>
+
+                    <div
+                        id="entry{{ loop.index }}"
+                        class="accordion-collapse collapse"
+                        data-bs-parent="#historyAccordion"
+                    >
+                        <div class="accordion-body">
+                            <p>
+                                <strong>Your Mood Input:</strong><br>
+                                {{ item.user_input }}
+                            </p>
+
+                            <p class="mt-2">
+                                <strong>Recommended Movies:</strong>
+                            </p>
+
+                            <ul>
+                                {% for movie in item.movies %}
+                                    <li>{{ movie }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">
+            No history yet. Try getting some recommendations!
+        </p>
+        <a href="{{ url_for('recom') }}" class="btn btn-netflix mt-3">
+            Get Recommendations
+        </a>
+    {% endif %}
+
+</div>
+
+{% endblock %}

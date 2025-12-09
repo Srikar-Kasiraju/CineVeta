@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Recommend | CineVeta{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">🎭 Mood-Based Movie Recommendation</h2>
+
+    <!-- Mood Input Form -->
+    <div class="card bg-dark text-light border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="POST">
+                <label class="form-label">
+                    How are you feeling right now?
+                </label>
+                <textarea
+                    class="form-control mb-3"
+                    name="mood_text"
+                    rows="3"
+                    placeholder="Describe your mood in a few words..."
+                    required
+                >{{ user_text }}</textarea>
+
+                <button type="submit" class="btn btn-netflix">
+                    Get Recommendations
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if detected_emotion %}
+        <div class="alert alert-info text-center">
+            Detected Emotion:
+            <strong>{{ detected_emotion | capitalize }}</strong>
+        </div>
+    {% endif %}
+
+    <!-- Recommended Movies -->
+    {% if recommended_movies %}
+        <h4 class="mb-3">🎬 Recommended For You</h4>
+
+        <div class="row g-4">
+            {% for movie in recommended_movies %}
+                <div class="col-6 col-md-4 col-lg-3">
+
+                    <!-- Entire Card Clickable -->
+                    <a href="{{ url_for('movie_detail', movie_id=movie.id) }}"
+                       class="text-decoration-none">
+
+                        <div class="card bg-dark text-light border-0 h-100 shadow-sm">
+
+                            {% if movie.poster_url %}
+                                <img
+                                    src="{{ movie.poster_url }}"
+                                    class="card-img-top"
+                                    alt="{{ movie.title }}"
+                                >
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    {{ movie.title }}
+                                </h6>
+                                <p class="small text-muted mb-0">
+                                    ⭐ {{ movie.rating }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </a>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

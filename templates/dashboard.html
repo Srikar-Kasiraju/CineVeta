@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | CineVeta{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">📊 Mood Analytics Dashboard</h2>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card bg-dark text-light border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <h6>Total Mood Entries</h6>
+                    <h3>{{ total_predictions }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-dark text-light border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <h6>Total Recommended</h6>
+                    <h3>{{ total_recommended }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-dark text-light border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <h6>Movies Watched</h6>
+                    <h3>{{ total_watched }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-dark text-light border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <h6>Success Rate</h6>
+                    <h3>{{ success_rate }}%</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row g-5">
+
+        <!-- Emotion Distribution -->
+        <div class="col-md-6">
+            <div class="card bg-dark text-light border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Emotion Distribution</h5>
+                    <canvas id="emotionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mood Timeline -->
+        <div class="col-md-6">
+            <div class="card bg-dark text-light border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Mood Timeline</h5>
+                    <canvas id="timelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Summary -->
+    <div class="card bg-dark text-light border-0 shadow-sm mt-5">
+        <div class="card-body">
+            <h5>Summary</h5>
+            <p>
+                <strong>Dominant Emotion:</strong>
+                {{ dominant_emotion | capitalize if dominant_emotion else "N/A" }}
+            </p>
+            <p>
+                <strong>Mood Health Score:</strong>
+                {{ mood_health_score }}%
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const emotionCtx = document.getElementById('emotionChart');
+    const timelineCtx = document.getElementById('timelineChart');
+
+    new Chart(emotionCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ emotion_labels | tojson }},
+            datasets: [{
+                data: {{ emotion_values | tojson }},
+                backgroundColor: [
+                    '#e50914',
+                    '#f39c12',
+                    '#3498db',
+                    '#2ecc71',
+                    '#9b59b6',
+                    '#1abc9c',
+                    '#e84393'
+                ]
+            }]
+        }
+    });
+
+    new Chart(timelineCtx, {
+        type: 'line',
+        data: {
+            labels: {{ timeline_labels | tojson }},
+            datasets: [{
+                label: 'Mood Score',
+                data: {{ timeline_scores | tojson }},
+                fill: false,
+                borderColor: '#e50914',
+                tension: 0.4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: 0,
+                    max: 5
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

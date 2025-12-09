@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Environment variables
+.env
+
+# Databases
+*.db
+database.db
+
+# Cache / model / HF stuff
+cache/
+*.pt
+*.bin
+*.h5
+movies_cache.json
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Home | MoodFlix{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">🏠 Welcome to MoodFlix</h2>
+
+    <!-- Popular Movies -->
+    <section class="mb-5">
+        <h4 class="mb-3">🔥 Popular Movies</h4>
+
+        {% if popular_movies %}
+            <div class="row g-4">
+                {% for movie in popular_movies %}
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="text-decoration-none">
+                            <div class="card bg-dark border-0 h-100 shadow-sm">
+                                {% if movie.poster_url %}
+                                    <img
+                                        src="{{ movie.poster_url }}"
+                                        class="card-img-top"
+                                        alt="{{ movie.title }}"
+                                    >
+                                {% endif %}
+                                <div class="card-body text-center">
+                                    <p class="small text-light mb-0">
+                                        {{ movie.title }}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">Unable to load popular movies.</p>
+        {% endif %}
+    </section>
+
+    <!-- Watched Movies -->
+    <section>
+        <h4 class="mb-3">✅ Recently Watched</h4>
+
+        {% if watched_movies %}
+            <div class="row g-4">
+                {% for movie in watched_movies %}
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="text-decoration-none">
+                            <div class="card bg-dark border-0 h-100 shadow-sm">
+                                {% if movie.poster_url %}
+                                    <img
+                                        src="{{ movie.poster_url }}"
+                                        class="card-img-top"
+                                        alt="{{ movie.title }}"
+                                    >
+                                {% endif %}
+                                <div class="card-body text-center">
+                                    <p class="small text-light mb-0">
+                                        {{ movie.title }}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">
+                You haven't watched any movies yet.
+            </p>
+            <a href="{{ url_for('recom') }}" class="btn btn-netflix mt-2">
+                Get Recommendations
+            </a>
+        {% endif %}
+    </section>
+
+</div>
+
+{% endblock %}
