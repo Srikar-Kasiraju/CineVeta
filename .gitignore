@@ -19,7 +19,6 @@ cache/
 *.pt
 *.bin
 *.h5
-movies_cache.json
 
 # OS files
 .DS_Store
